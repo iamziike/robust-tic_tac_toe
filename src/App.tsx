@@ -1,45 +1,41 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import styled from 'styled-components';
 
-function App() {
-  const [count, setCount] = useState(0)
+import ThemeProvider from './styles/ThemeProvider';
+import GlobalStyles from './styles/GlobalStyles';
+import Header from './components/layouts/Header/Header';
 
+const StyledGlobalWrapper = styled.div`
+  ${({ theme }) => theme.color.black}:red;
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.color.black};
+  color: ${({ theme }) => theme.color.white};
+  height: 100vh;
+
+  *::selection {
+    background-color: ${({ theme }) => theme.color.white};
+    color: ${({ theme }) => theme.color.black};
+  }
+
+  & > * {
+    flex-grow: 0;
+
+    &:nth-child(2) {
+      flex-grow: 100;
+    }
+  }
+`;
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
-}
+    <ThemeProvider>
+      <GlobalStyles />
+      <StyledGlobalWrapper>
+        <Header />
+        <main>Main</main>
+      </StyledGlobalWrapper>
+    </ThemeProvider>
+  );
+};
 
-export default App
+export default App;
