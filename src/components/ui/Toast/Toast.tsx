@@ -11,6 +11,7 @@ const StyledToast = styled.div<{ isOpen: boolean }>`
   position: fixed;
   bottom: 5px;
   left: 5px;
+  z-index: 100;
   padding: ${({ theme }) => theme.spacing.df};
   color: ${({ theme }) => theme.colors.secondary};
   background-color: ${({ theme }) => theme.colors.primary};
