@@ -1,7 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
-  Cell,
   Index,
   PositionsPlayed,
   X_O,
@@ -24,6 +24,7 @@ type InitialState = {
   turn: 0 | 1;
   winner: Player | null;
   isDraw: boolean;
+  gameID: string;
 };
 
 type ActionPayload<T> = {
@@ -88,6 +89,7 @@ const getInitialState = (): InitialState => {
     turn: PLAYERS_INDEXES.PLAYER_1,
     winner: null,
     isDraw: false,
+    gameID: uuidv4(),
   };
 };
 

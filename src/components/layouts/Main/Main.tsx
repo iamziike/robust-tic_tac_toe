@@ -1,16 +1,16 @@
 import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
 
 import Board from '../../game/Board/Board';
 import Player from '../../game/Player/Player';
 import AlternateGameShapeControl from '../../game-configs/AlternateGameShapeControl/AlternateGameShapeControl';
 import AlternateGameModeControl from '../../game-configs/AlternateGameModeControl/AlternateGameModeControl';
 import ResetControl from '../../game-configs/ResetControl/ResetControl';
-import { Cells, Index, X_O } from '../../../types/types';
 import useBoardStore from '../../../store/store-hooks/useBoardStore';
 import useFunctionalityStore from '../../../store/store-hooks/userFunctionalityStore';
 import Toast from '../../ui/Toast/Toast';
-import { useEffect } from 'react';
 import getAIPosition from '../../../utils/getAIPosition';
+import { Index } from '../../../types/types';
 import { WINNING_POSITIONS } from '../../../constants/constants';
 
 const StyledMain = styled.main`
@@ -58,6 +58,7 @@ const StyledBoard = styled(Board)<{ isFlip: boolean }>`
 `;
 
 const Main = () => {
+  const AIActionTImer = useRef<number>();
   const {
     getPlayers,
     getPositionsPlayed,
@@ -65,7 +66,7 @@ const Main = () => {
     getStore: getBoardStore,
     refreshBoard,
   } = useBoardStore();
-  const { isDraw, winner, turn, players, gameMode, positionsPlayed } =
+  const { isDraw, winner, turn, players, gameMode, positionsPlayed, gameID } =
     getBoardStore();
   const { isFlip } = useFunctionalityStore().getStore();
 
@@ -76,7 +77,7 @@ const Main = () => {
   useEffect(() => {
     if (gameMode !== 'PC 🤖') return;
     if (players[turn].name === 'PC 🤖')
-      setTimeout(
+      AIActionTImer.current = setTimeout(
         () =>
           addToPlayerPositions(
             getAIPosition(
@@ -89,6 +90,10 @@ const Main = () => {
         Object.values(positionsPlayed).length > 6 ? 500 : Math.random() * 4000
       );
   }, [positionsPlayed]);
+
+  useEffect(() => {
+    clearTimeout(AIActionTImer.current);
+  }, [gameID]);
 
   return (
     <StyledMain>
