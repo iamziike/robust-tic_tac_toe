@@ -8,6 +8,7 @@ const GlobalStyles = createGlobalStyle`
         border: none;
         box-sizing: border-box;
         font-family: inherit;
+        transition: background-color 0.5s;
     }
 
     li {
@@ -15,6 +16,7 @@ const GlobalStyles = createGlobalStyle`
     }
 
     a {
+      color: inherit;
       text-decoration: none;
     }
 

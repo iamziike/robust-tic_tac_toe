@@ -1,16 +1,16 @@
-const color = {
+export const colors = {
   black: 'hsl(0, 0%, 21%)',
   white: 'hsl(0, 0%, 100%)',
+  'opacified-white': 'hsla(0, 0%, 95%, 0.847)',
   'opacified-black': 'hsla(0, 0%, 0%, 0.247)',
-  'opacified-black--deep': 'hsla(0, 0%, 0%, 0.6)',
 } as const;
 
 const boxShadow = {
-  default: `0px 1px 4px ${color['opacified-black']}`,
+  default: `0px 1px 4px ${colors['opacified-black']}`,
 } as const;
 
 const textShadow = {
-  default: `0px 1px 4px ${color['opacified-black']}`,
+  default: `0px 1px 4px ${colors['opacified-black']}`,
 } as const;
 
 const spacing = {
@@ -21,11 +21,15 @@ const spacing = {
   lg: '40px',
 } as const;
 
+const transition = {
+  bouncy: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+};
+
 const theme = {
-  color,
   boxShadow,
   textShadow,
   spacing,
+  transition,
 };
 
 export default theme;

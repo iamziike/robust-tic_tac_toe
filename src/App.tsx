@@ -1,20 +1,23 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import ThemeProvider from './styles/ThemeProvider';
-import GlobalStyles from './styles/GlobalStyles';
 import Header from './components/layouts/Header/Header';
+import Main from './components/layouts/Main/Main';
+import SideBar from './components/layouts/SideBar/SideBar';
 
 const StyledGlobalWrapper = styled.div`
-  ${({ theme }) => theme.color.black}:red;
+  ${({ theme }) => theme.colors.secondary}:red;
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.color.black};
-  color: ${({ theme }) => theme.color.white};
+  background-color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.primary};
   height: 100vh;
+  overflow: hidden;
 
   *::selection {
-    background-color: ${({ theme }) => theme.color.white};
-    color: ${({ theme }) => theme.color.black};
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.secondary};
   }
 
   & > * {
@@ -26,13 +29,23 @@ const StyledGlobalWrapper = styled.div`
   }
 `;
 
+const StyledSideBar = styled(SideBar)<{ isOpen: boolean }>`
+  position: fixed;
+  bottom: ${({ isOpen }) => (isOpen ? '0vh' : '100vh')};
+  transition: bottom 0.5s ${({ theme }) => theme.transition.bouncy};
+`;
+
 const App = () => {
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+
+  const handleSideBarVisibility = () => setIsSideBarOpen((prev) => !prev);
+
   return (
     <ThemeProvider>
-      <GlobalStyles />
       <StyledGlobalWrapper>
-        <Header />
-        <main>Main</main>
+        <Header onSettingClick={handleSideBarVisibility} />
+        <Main />
+        <StyledSideBar isOpen={isSideBarOpen} />
       </StyledGlobalWrapper>
     </ThemeProvider>
   );

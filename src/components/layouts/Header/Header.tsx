@@ -3,20 +3,27 @@ import styled from 'styled-components';
 import Icon from '../../ui/Icon/Icon';
 import { ReactComponent as BoardIcon } from '/src/assets/solid_chess-board.svg';
 import { ReactComponent as SettingIcon } from '/src/assets/settings.svg';
-import { ReactComponent as MusicOn } from '/src/assets/on-sound.svg';
+import ThemeChangerControl from '../../game-configs/ThemeChangerControl/ThemeChangerControl';
+
+type HeaderProps = {
+  onSettingClick: VoidFunction;
+};
 
 const StyledHeader = styled.div`
+  position: relative;
+  z-index: 100;
   padding: ${({ theme }) => `${theme.spacing.xsm} ${theme.spacing.df}`};
+  background-color: ${({ theme }) => theme.colors.secondary};
   box-shadow: ${({ theme }) => theme.boxShadow.default};
 
   &,
-  & .header-title {
+  & > h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  & .header-title {
+  & > h1 {
     gap: ${({ theme }) => theme.spacing.sm};
 
     & svg {
@@ -34,15 +41,19 @@ const StyledHeader = styled.div`
   }
 `;
 
-const Header = () => {
+const Header = ({ onSettingClick }: HeaderProps) => {
   return (
     <StyledHeader>
-      <Icon item={<SettingIcon />} />
-      <h1 className='header-title'>
+      <Icon
+        item={<SettingIcon />}
+        onClick={onSettingClick}
+        description='Settings'
+      />
+      <h1>
         <span>Tic Tac Toe</span>
         <BoardIcon />
       </h1>
-      <Icon item={<MusicOn />} />
+      <ThemeChangerControl />
     </StyledHeader>
   );
 };
