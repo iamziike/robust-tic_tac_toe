@@ -1,4 +1,4 @@
-import { Cells, Index, PositionsPlayed } from '../../../types/types';
+import { Index, PositionsPlayed } from '../../../types/types';
 import StyledBoard from './StyledBoard';
 
 type BoardProps = {
