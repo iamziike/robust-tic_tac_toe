@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import AlternateGameModeConfig from '../../game-configs/AlternateGameModeControl/AlternateGameModeControl';
 import AlternateGameShapeConfig from '../../game-configs/AlternateGameShapeControl/AlternateGameShapeControl';
+import DifficultyChanger from '../../game-configs/DifficultyChanger/DifficultyChanger';
 import FlipConfig from '../../game-configs/FlipControl/FlipControl';
 import ResetConfig from '../../game-configs/ResetControl/ResetControl';
 import ThemeChangerConfig from '../../game-configs/ThemeChangerControl/ThemeChangerControl';
@@ -30,6 +31,7 @@ const SideBar = ({ className }: SideBarProps) => {
         description='Github'
         link='https://github.com/iamziike'
       />
+      <DifficultyChanger />
       <ResetConfig />
       <ThemeChangerConfig />
       <AlternateGameModeConfig />

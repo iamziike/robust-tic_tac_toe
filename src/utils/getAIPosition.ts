@@ -1,3 +1,4 @@
+import { Difficulty } from './../types/types';
 import { getUniqueNeedles, isSomeNeedlesInHay } from './helpers';
 import { Index, WINNING_POSITIONS_TYPE } from '../types/types';
 
@@ -33,6 +34,7 @@ const getClosestMatchingPosition = (
 
 const getAIPosition = (
   winningPositions: WINNING_POSITIONS_TYPE,
+  difficulty: Difficulty,
   indexPositionsByOpponent: Index[],
   indexPositionsByAI: Index[]
 ): Index => {
@@ -41,52 +43,57 @@ const getAIPosition = (
     ...indexPositionsByAI,
   ];
 
-  // START UP CONFIGS
-  if (!indexPositionsCombined.includes(5)) return 5;
+  if (difficulty === 'HARD') {
+    // START UP CONFIGS
+    if (!indexPositionsCombined.includes(5)) return 5;
 
-  // WIN / KO
-  const closestMatchingPositionByAI = getClosestMatchingPosition(
-    winningPositions,
-    indexPositionsByAI,
-    indexPositionsByOpponent
-  );
-  if (closestMatchingPositionByAI)
-    return <Index>(
-      getUniqueNeedles(indexPositionsByAI, closestMatchingPositionByAI)
+    // WIN / KO
+    const closestMatchingPositionByAI = getClosestMatchingPosition(
+      winningPositions,
+      indexPositionsByAI,
+      indexPositionsByOpponent
     );
+    if (closestMatchingPositionByAI)
+      return <Index>(
+        getUniqueNeedles(indexPositionsByAI, closestMatchingPositionByAI)
+      );
 
-  // DEFEND
-  const closestMatchingPositionByOpponent = getClosestMatchingPosition(
-    winningPositions,
-    indexPositionsByOpponent,
-    indexPositionsByAI
-  );
-  if (closestMatchingPositionByOpponent)
-    return <Index>(
-      getUniqueNeedles(
-        indexPositionsByOpponent,
-        closestMatchingPositionByOpponent
-      )
+    // DEFEND
+    const closestMatchingPositionByOpponent = getClosestMatchingPosition(
+      winningPositions,
+      indexPositionsByOpponent,
+      indexPositionsByAI
     );
+    if (closestMatchingPositionByOpponent)
+      return <Index>(
+        getUniqueNeedles(
+          indexPositionsByOpponent,
+          closestMatchingPositionByOpponent
+        )
+      );
 
-  // EXCLUSIVE (real ART OF WAR STUFF)
-  if (indexPositionsByAI.includes(5) || indexPositionsByOpponent.includes(5)) {
-    const tactics = [
-      { key: 1, value: 9 },
-      { key: 9, value: 1 },
-      { key: 7, value: 3 },
-      { key: 3, value: 7 },
-    ];
+    // EXCLUSIVE (real ART OF WAR STUFF)
+    if (
+      indexPositionsByAI.includes(5) ||
+      indexPositionsByOpponent.includes(5)
+    ) {
+      const tactics = [
+        { key: 1, value: 9 },
+        { key: 9, value: 1 },
+        { key: 7, value: 3 },
+        { key: 3, value: 7 },
+      ];
 
-    const tacticsKeys = tactics.map((tactic) => tactic.key);
+      const tacticsKeys = tactics.map((tactic) => tactic.key);
 
-    const uniqueKeys = <Array<Index>>(
-      getUniqueNeedles(indexPositionsCombined, tacticsKeys, false)
-    );
-    if (uniqueKeys) {
-      const randomSelection = getRandomSelection(uniqueKeys);
+      const uniqueKeys = <Array<Index>>(
+        getUniqueNeedles(indexPositionsCombined, tacticsKeys, false)
+      );
+      if (uniqueKeys) {
+        const randomSelection = getRandomSelection(uniqueKeys);
 
-      if (randomSelection) return randomSelection;
+        if (randomSelection) return randomSelection;
+      }
     }
   }
 

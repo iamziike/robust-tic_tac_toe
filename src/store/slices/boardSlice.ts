@@ -6,6 +6,7 @@ import {
   PositionsPlayed,
   X_O,
   WINNING_POSITIONS_TYPE,
+  Difficulty,
 } from './../../types/types';
 import { GameMode } from '../../types/types';
 import LocalStorage from '../../utils/LocalStorage/LocalStorage';
@@ -25,6 +26,7 @@ type InitialState = {
   winner: Player | null;
   isDraw: boolean;
   gameID: string;
+  difficulty: Difficulty;
 };
 
 type ActionPayload<T> = {
@@ -38,6 +40,7 @@ enum PLAYERS_INDEXES {
 
 const PLAYER_SHAPE_DB_KEY = 'PLAYER_SHAPE_DB_KEY';
 const GAME_MODE_DB_KEY = 'GAME_MODE_DB_KEY';
+const DIFFICULTY_DB_KEY = 'DIFFICULTY_DB_KEY';
 
 const getPlayersNamesToUse = (gameMode: GameMode): [PlayerName, PlayerName] => {
   return gameMode === 'Human 😀'
@@ -75,6 +78,8 @@ const isWinner = (
 const getInitialState = (): InitialState => {
   const gameMode = LocalStorage.getItem<GameMode>(GAME_MODE_DB_KEY) || 'PC 🤖';
   const playerShape = LocalStorage.getItem<X_O>(PLAYER_SHAPE_DB_KEY);
+  const difficulty =
+    LocalStorage.getItem<Difficulty>(DIFFICULTY_DB_KEY) || 'HARD';
 
   const playersName = getPlayersNamesToUse(gameMode);
   const players = setPlayers(
@@ -90,6 +95,7 @@ const getInitialState = (): InitialState => {
     winner: null,
     isDraw: false,
     gameID: uuidv4(),
+    difficulty,
   };
 };
 
@@ -168,6 +174,12 @@ const boardSlice = createSlice({
           ? PLAYERS_INDEXES.PLAYER_2
           : PLAYERS_INDEXES.PLAYER_1;
     },
+    InnerChangeGameDifficulty(store) {
+      let { difficulty } = store;
+      difficulty = difficulty === 'EASY' ? 'HARD' : 'EASY';
+
+      LocalStorage.setItem(DIFFICULTY_DB_KEY, difficulty);
+    },
   },
 });
 
@@ -177,6 +189,7 @@ export const {
   InnerChangePlayerShape,
   InnerChangeGameMode,
   InnerAddToPositionsPlayed,
+  InnerChangeGameDifficulty,
 } = boardSlice.actions;
 
 const { reducer: boardReducer } = boardSlice;

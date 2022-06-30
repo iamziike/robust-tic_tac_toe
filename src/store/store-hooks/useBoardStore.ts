@@ -7,6 +7,7 @@ import {
   InnerChangeGameMode,
   InnerAddToPositionsPlayed,
   InnerRefresh,
+  InnerChangeGameDifficulty,
 } from '../slices/boardSlice';
 import { Index } from '../../types/types';
 
@@ -49,6 +50,11 @@ const useBoardStore = () => {
     resetBoard();
   };
 
+  const changeGameDifficulty = () => {
+    dispatch(InnerChangeGameDifficulty());
+    resetBoard();
+  };
+
   const addToPlayerPositions = (index: Index, isHuman: boolean) => {
     dispatch(InnerAddToPositionsPlayed({ isHuman, index }));
   };
@@ -64,6 +70,7 @@ const useBoardStore = () => {
     changePlayerShape,
     changeGameMode,
     addToPlayerPositions,
+    changeGameDifficulty,
   };
 };
 

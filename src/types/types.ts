@@ -14,3 +14,5 @@ export type ThemeMode = 'DARK' | 'LIGHT';
 export type PositionsPlayed = Record<Index, Cell>;
 
 export type WINNING_POSITIONS_TYPE = typeof WINNING_POSITIONS;
+
+export type Difficulty = 'EASY' | 'HARD';

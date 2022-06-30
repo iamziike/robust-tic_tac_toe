@@ -66,8 +66,16 @@ const Main = () => {
     getStore: getBoardStore,
     refreshBoard,
   } = useBoardStore();
-  const { isDraw, winner, turn, players, gameMode, positionsPlayed, gameID } =
-    getBoardStore();
+  const {
+    isDraw,
+    winner,
+    turn,
+    players,
+    gameMode,
+    positionsPlayed,
+    gameID,
+    difficulty,
+  } = getBoardStore();
   const { isFlip } = useFunctionalityStore().getStore();
 
   const handleBoardClickHandler = (index: Index) => {
@@ -82,6 +90,7 @@ const Main = () => {
           addToPlayerPositions(
             getAIPosition(
               WINNING_POSITIONS,
+              difficulty,
               players[+!turn].positions,
               players[+turn].positions
             ),
