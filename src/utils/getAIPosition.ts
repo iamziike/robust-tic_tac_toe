@@ -44,8 +44,34 @@ const getAIPosition = (
   ];
 
   if (difficulty === 'HARD') {
+    // EXCLUSIVE GAME PLAN 1 (real ART OF WAR STUFF)
+    const isAllowGamePlanOne = (
+      opponentPosition: Index,
+      positionToPlay: Index
+    ) => {
+      if (
+        indexPositionsByOpponent.length === 1 &&
+        indexPositionsByAI.length === 0
+      )
+        return (
+          indexPositionsByOpponent.includes(opponentPosition) &&
+          !indexPositionsByOpponent.includes(positionToPlay)
+        );
+      return false;
+    };
+
+    if (isAllowGamePlanOne(1, 9)) return 9;
+    if (isAllowGamePlanOne(3, 7)) return 7;
+    if (isAllowGamePlanOne(7, 3)) return 3;
+    if (isAllowGamePlanOne(9, 1)) return 1;
+
     // START UP CONFIGS
-    if (!indexPositionsCombined.includes(5)) return 5;
+    if (
+      indexPositionsByOpponent.length === 0 &&
+      indexPositionsByAI.length === 0 &&
+      !indexPositionsCombined.includes(5)
+    )
+      return 5;
 
     // WIN / KO
     const closestMatchingPositionByAI = getClosestMatchingPosition(
@@ -72,7 +98,7 @@ const getAIPosition = (
         )
       );
 
-    // EXCLUSIVE (real ART OF WAR STUFF)
+    // EXCLUSIVE GAME PLAN 2 (real ART OF WAR STUFF)
     if (
       indexPositionsByAI.includes(5) ||
       indexPositionsByOpponent.includes(5)
