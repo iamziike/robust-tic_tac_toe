@@ -12,8 +12,7 @@ const StyledGlobalWrapper = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.secondary};
   color: ${({ theme }) => theme.colors.primary};
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 
   *::selection {
     background-color: ${({ theme }) => theme.colors.primary};

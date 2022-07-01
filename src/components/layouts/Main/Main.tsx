@@ -19,6 +19,8 @@ import {
 
 const StyledMain = styled.main`
   display: flex;
+  gap: 20px;
+  padding: 10px;
   flex-direction: column;
   justify-content: center;
 `;
