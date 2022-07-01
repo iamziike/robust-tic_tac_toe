@@ -124,8 +124,12 @@ const Main = () => {
         positionsPlayed={getPositionsPlayed()}
       />
       <Players>
-        {getPlayers().map(({ id, name, score, shape }) => (
-          <Player key={id} player={{ name, score, shape }} />
+        {getPlayers().map(({ id, name, score, shape }, index) => (
+          <Player
+            key={id}
+            player={{ name, score, shape }}
+            shouldPlay={turn === index}
+          />
         ))}
       </Players>
       <StyledSetting>
