@@ -104,17 +104,16 @@ const Main = () => {
     clearTimeout(AIActionTImer.current);
   }, [gameID]);
 
+  let toastMessage = '';
+  if (isDraw) toastMessage = 'Game ended in a Draw 😞';
+  else if (winner) toastMessage = `${winner && winner.name}  just won 😻`;
+
   return (
     <StyledMain>
       <Toast
-        isOpen={isDraw}
-        message='Game ended in a Draw 😞'
+        message={toastMessage}
         onClose={refreshBoard}
-      />
-      <Toast
-        isOpen={winner ? true : false}
-        message={`${winner && winner.name}  just won 😻`}
-        onClose={refreshBoard}
+        isOpen={(winner || isDraw) as boolean}
       />
       <StyledBoard
         isFlip={isFlip}

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 type ToastProps = {
@@ -7,7 +7,9 @@ type ToastProps = {
   onClose: VoidFunction;
 };
 
-const StyledToast = styled.div<{ isOpen: boolean }>`
+const StyledToast = styled.div<{
+  isOpen: boolean;
+}>`
   position: fixed;
   bottom: 5px;
   left: 5px;
@@ -24,11 +26,23 @@ const StyledToast = styled.div<{ isOpen: boolean }>`
 `;
 
 const Toast = ({ message, isOpen, onClose }: ToastProps) => {
+  /**
+   * It function is to remember its last message incase its still open
+   */
+  const staticMessage = useRef<string>('');
+
   useEffect(() => {
-    if (isOpen) setTimeout(onClose, 1500);
+    if (!isOpen) return;
+    staticMessage.current = message;
+
+    setTimeout(onClose, 1500);
   }, [isOpen]);
 
-  return <StyledToast isOpen={isOpen}>{message.slice(0, 40)}</StyledToast>;
+  return (
+    <StyledToast isOpen={isOpen}>
+      {(message || staticMessage.current)?.slice(0, 40)}
+    </StyledToast>
+  );
 };
 
 export default Toast;
