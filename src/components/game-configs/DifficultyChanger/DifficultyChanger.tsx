@@ -7,7 +7,6 @@ const DifficultyChanger = () => {
   const { changeGameDifficulty, getStore } = useBoardStore();
 
   const { difficulty } = getStore();
-  console.log(difficulty);
 
   const icon = difficulty === 'EASY' ? <HardIcon /> : <EasyIcon />;
 

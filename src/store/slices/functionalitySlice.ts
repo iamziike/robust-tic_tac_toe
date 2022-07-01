@@ -22,7 +22,6 @@ const functionalitySlice = createSlice({
       if (payload !== store.themeMode) store.themeMode = payload;
     },
     innerChangeIsFlip(store, { payload }: { payload: boolean }) {
-      console.log('payload');
       if (payload !== store.isFlip) store.isFlip = payload;
     },
     innerChangeIsMusicOn(store, { payload }: { payload: boolean }) {
