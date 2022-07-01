@@ -1,5 +1,9 @@
 import { Difficulty } from './../types/types';
-import { getUniqueNeedles, isSomeNeedlesInHay } from './helpers';
+import {
+  getUniqueNeedles,
+  isAllNeedlesInHay,
+  isSomeNeedlesInHay,
+} from './helpers';
 import { Index, WINNING_POSITIONS_TYPE } from '../types/types';
 
 const INDEX_PLAYABLE: Index[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -44,34 +48,16 @@ const getAIPosition = (
   ];
 
   if (difficulty === 'HARD') {
-    // EXCLUSIVE GAME PLAN 1 (real ART OF WAR STUFF)
-    const isAllowGamePlanOne = (
-      opponentPosition: Index,
-      positionToPlay: Index
-    ) => {
-      if (
-        indexPositionsByOpponent.length === 1 &&
-        indexPositionsByAI.length === 0
-      )
-        return (
-          indexPositionsByOpponent.includes(opponentPosition) &&
-          !indexPositionsByOpponent.includes(positionToPlay)
-        );
-      return false;
-    };
-
-    if (isAllowGamePlanOne(1, 9)) return 9;
-    if (isAllowGamePlanOne(3, 7)) return 7;
-    if (isAllowGamePlanOne(7, 3)) return 3;
-    if (isAllowGamePlanOne(9, 1)) return 1;
-
     // START UP CONFIGS
+    if (!indexPositionsCombined.includes(5)) return 5;
     if (
-      indexPositionsByOpponent.length === 0 &&
-      indexPositionsByAI.length === 0 &&
-      !indexPositionsCombined.includes(5)
+      indexPositionsByOpponent.length === 2 &&
+      (isAllNeedlesInHay(indexPositionsByOpponent, [1, 9]) ||
+        isAllNeedlesInHay(indexPositionsByOpponent, [7, 3])) &&
+      indexPositionsByAI.length === 1 &&
+      indexPositionsByAI.includes(5)
     )
-      return 5;
+      return getRandomSelection([4, 6]);
 
     // WIN / KO
     const closestMatchingPositionByAI = getClosestMatchingPosition(
