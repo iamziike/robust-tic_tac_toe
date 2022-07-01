@@ -15,3 +15,18 @@ export const getUniqueNeedles = <T>(
   if (single) return results[0];
   return results;
 };
+
+export const clearTimeoutIDs = (ids: number[]) => {
+  ids.forEach((id) => id && clearTimeout(id));
+};
+
+export const executeTillReturnRandomNumber = (
+  greatherThan: number,
+  lessThan: number
+) => {
+  let number = 0;
+  while (number < greatherThan) {
+    number = Math.random() * lessThan;
+  }
+  return number;
+};

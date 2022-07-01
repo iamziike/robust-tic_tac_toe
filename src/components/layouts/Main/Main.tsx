@@ -12,6 +12,10 @@ import Toast from '../../ui/Toast/Toast';
 import getAIPosition from '../../../utils/getAIPosition';
 import { Index } from '../../../types/types';
 import { WINNING_POSITIONS } from '../../../constants/constants';
+import {
+  clearTimeoutIDs,
+  executeTillReturnRandomNumber,
+} from '../../../utils/helpers';
 
 const StyledMain = styled.main`
   display: flex;
@@ -73,7 +77,6 @@ const Main = () => {
     players,
     gameMode,
     positionsPlayed,
-    gameID,
     difficulty,
   } = getBoardStore();
   const { isFlip } = useFunctionalityStore().getStore();
@@ -84,25 +87,25 @@ const Main = () => {
 
   useEffect(() => {
     if (gameMode !== 'PC 🤖') return;
-    if (players[turn].name === 'PC 🤖')
-      AIActionTImer.current = setTimeout(
-        () =>
-          addToPlayerPositions(
-            getAIPosition(
-              WINNING_POSITIONS,
-              difficulty,
-              players[+!turn].positions,
-              players[+turn].positions
-            ),
-            false
-          ),
-        Object.values(positionsPlayed).length > 6 ? 500 : Math.random() * 4000
-      );
-  }, [positionsPlayed]);
+    AIActionTImer.current && clearTimeoutIDs([AIActionTImer.current]);
+    if (players[turn].name !== 'PC 🤖') return;
 
-  useEffect(() => {
-    clearTimeout(AIActionTImer.current);
-  }, [gameID]);
+    AIActionTImer.current = setTimeout(
+      () =>
+        addToPlayerPositions(
+          getAIPosition(
+            WINNING_POSITIONS,
+            difficulty,
+            players[+!turn].positions,
+            players[+turn].positions
+          ),
+          false
+        ),
+      Object.values(positionsPlayed).length > 6
+        ? 500
+        : executeTillReturnRandomNumber(1000, 4000)
+    );
+  }, [positionsPlayed]);
 
   let toastMessage = '';
   if (isDraw) toastMessage = 'Game ended in a Draw 😞';

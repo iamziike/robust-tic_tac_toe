@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
@@ -15,7 +14,11 @@ import { WINNING_POSITIONS } from '../../constants/constants';
 
 type PlayerName = 'Player 😀' | 'PC 🤖' | 'Player1 😀' | 'Player2 😀';
 type UnRegisteredPlayer = { shape: X_O; score: number; name: PlayerName };
-type Player = UnRegisteredPlayer & { id: number | string; positions: Index[] };
+type Player = UnRegisteredPlayer & {
+  id: number | string;
+  positions: Index[];
+  isStartingFirst: boolean;
+};
 type Players = [Player, Player];
 
 type InitialState = {
@@ -25,7 +28,6 @@ type InitialState = {
   turn: 0 | 1;
   winner: Player | null;
   isDraw: boolean;
-  gameID: string;
   difficulty: Difficulty;
 };
 
@@ -61,8 +63,8 @@ const setPlayers = (
   player2: UnRegisteredPlayer
 ): Players => {
   return [
-    { ...player1, id: Math.random(), positions: [] },
-    { ...player2, id: Math.random(), positions: [] },
+    { ...player1, id: Math.random(), positions: [], isStartingFirst: true },
+    { ...player2, id: Math.random(), positions: [], isStartingFirst: false },
   ];
 };
 
@@ -94,7 +96,6 @@ const getInitialState = (): InitialState => {
     turn: PLAYERS_INDEXES.PLAYER_1,
     winner: null,
     isDraw: false,
-    gameID: uuidv4(),
     difficulty,
   };
 };
@@ -115,8 +116,14 @@ const boardSlice = createSlice({
       if (store.isDraw) store.isDraw = false;
       if (store.winner) store.winner = null;
 
-      store.players[PLAYERS_INDEXES.PLAYER_1].positions = [];
-      store.players[PLAYERS_INDEXES.PLAYER_2].positions = [];
+      store.players = store.players.map((player, index) => {
+        if (!player.isStartingFirst) store.turn = index as 0 | 1;
+        return {
+          ...player,
+          positions: [],
+          isStartingFirst: player.isStartingFirst ? false : true,
+        } as Player;
+      }) as Players;
       store.positionsPlayed = {} as PositionsPlayed;
     },
 
@@ -152,7 +159,7 @@ const boardSlice = createSlice({
       if (positionsPlayed[index]) return;
 
       // if winnner or draw ie) means game is about to 'self' refresh
-      if ((isHuman && winner) || isDraw) return;
+      if (winner || isDraw) return;
 
       const focusedPlayer = players[store.turn];
       positionsPlayed[index] = focusedPlayer.shape;
@@ -165,7 +172,7 @@ const boardSlice = createSlice({
       }
 
       // notify if Draw
-      if (!store.winner && Object.values(positionsPlayed).length === 9)
+      if (!winner && Object.values(positionsPlayed).length === 9)
         store.isDraw = true;
 
       // alternate the turns
