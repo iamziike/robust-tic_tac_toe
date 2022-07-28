@@ -53,7 +53,7 @@ const Header = ({ onSettingClick }: HeaderProps) => {
         <span>Tic Tac Toe</span>
         <BoardIcon />
       </h1>
-      <ThemeChangerControl />
+      <ThemeChangerControl shouldShowDescription={false} />
     </StyledHeader>
   );
 };
